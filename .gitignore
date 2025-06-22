@@ -1,0 +1,4 @@
+.DS_Store
+Thumbs.db
+/php/www/.env
+/php/www/vendor

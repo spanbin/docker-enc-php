@@ -1,0 +1,7 @@
+.gitignore
+.dockerignore
+Dockerfile
+.DS_Store
+Thumbs.db
+/www/vendor
+/www/composer.lock

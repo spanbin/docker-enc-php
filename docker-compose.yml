@@ -1,0 +1,83 @@
+services:
+  nginx:
+    image: ${APP_NAME}-nginx:latest
+    build:
+      context: ./nginx
+      args:
+        NGINX_VERSION: nginx:${NGINX_VERSION}-alpine
+      cache_from:
+        - ${APP_NAME}-nginx:latest
+      tags:
+        - ${APP_NAME}-nginx:latest
+    container_name: ${APP_NAME}-nginx
+    volumes:
+      - www:/www:rw
+    ports:
+      - "${NGINX_OPEN_PORT}:80"
+    restart: always
+    networks:
+      - default
+    depends_on:
+      - php
+
+  php:
+    image: ${APP_NAME}-php:latest
+    build:
+      context: ./php
+      args:
+        PHP_VERSION: php:${PHP_VERSION}
+        PHP_EXTENSIONS: ${PHP_EXTENSIONS}
+        ENCRYPTED_FILES: ${ENCRYPTED_FILES}
+      cache_from:
+        - ${APP_NAME}-php:latest
+      tags:
+        - ${APP_NAME}-php:latest
+    container_name: ${APP_NAME}-php
+    volumes:
+      - www:/www:rw
+    restart: always
+    environment:
+      APP_ENV: "${APP_ENV}"
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - default
+
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    container_name: ${APP_NAME}-mysql
+    ports:
+      - "${MYSQL_HOST_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql/:rw
+      - mysql_log:/var/log/mysql/:rw
+    restart: always
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_ROOT_HOST: "${MYSQL_ROOT_HOST}"
+      TZ: "Asia/Shanghai"
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:${MSSQL_VERSION}
+    container_name: ${APP_NAME}-sqlserver
+    ports:
+      - "${MSSQL_HOST_PORT}:1433"
+    volumes:
+      - mssql:/var/opt/mssql:rw
+    restart: always
+    networks:
+      - default
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD}"
+      MSSQL_COLLATION: "${MSSQL_COLLATION}"
+      MSSQL_PID: "${MSSQL_PID}"
+      TZ: "Asia/Shanghai"
+
+volumes:
+  www:
+  mysql_data:
+  mysql_log:
+  mssql:
