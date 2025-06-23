@@ -30,10 +30,10 @@ RUN docker-php-ext-configure tonyenc --enable-tonyenc && \
 FROM base
 
 # 定义构建参数 PHP_EXTENSIONS，用于指定需要安装的PHP扩展列表
-ARG PHP_EXTENSIONS
+ARG PHP_EXTENSIONS=pdo_mysql mysqli mbstring gd intl curl opcache soap bcmath zip
 
 # 定义需要加密的文件或目录
-ARG ENCRYPTED_FILES
+ARG ENCRYPTED_FILES=/public
 
 # 安装系统依赖
 RUN export option="--no-install-recommends -y" \
