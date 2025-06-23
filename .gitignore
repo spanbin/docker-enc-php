@@ -2,3 +2,4 @@
 Thumbs.db
 /php/www/.env
 /php/www/vendor
+.env

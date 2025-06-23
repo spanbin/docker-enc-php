@@ -1,11 +1,17 @@
+# 定义Docker构建参数DOCKER_MIRROR_DOMAIN，用于指定DockerHub镜像域名
+ARG DOCKER_MIRROR_DOMAIN
+
 # 定义构建参数 PHP_VERSION，用于指定 PHP 的基础镜像版本
 ARG PHP_VERSION=php:8.2-fpm
 
 # 阶段1：基础镜像修改镜像源
-FROM ${PHP_VERSION} AS base
+FROM ${DOCKER_MIRROR_DOMAIN}/${PHP_VERSION} AS base
+
+# 定义构建参数 DEBIAN_MIRROR_DOMAIN，用于apt源加速
+ARG DEBIAN_MIRROR_DOMAIN=deb.debian.org
 
 # 设置镜像源加速
-RUN sed -i "s|deb.debian.org|mirrors.aliyun.com|g" /etc/apt/sources.list.d/debian.sources
+RUN sed -i "s|deb.debian.org|${DEBIAN_MIRROR_DOMAIN}|g" /etc/apt/sources.list.d/debian.sources
 
 # 阶段2：编译扩展并安装项目依赖
 FROM base AS builder

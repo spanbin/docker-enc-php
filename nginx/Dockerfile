@@ -1,5 +1,8 @@
+# 定义Docker构建参数DOCKER_MIRROR_DOMAIN，用于指定DockerHub镜像域名
+ARG DOCKER_MIRROR_DOMAIN
+
 ARG NGINX_VERSION=nginx:1.26-alpine
-FROM ${NGINX_VERSION}
+FROM ${DOCKER_MIRROR_DOMAIN}/${NGINX_VERSION}
 
 # 拷贝相关配置
 COPY . /etc/nginx
