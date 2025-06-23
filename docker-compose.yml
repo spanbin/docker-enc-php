@@ -1,15 +1,15 @@
 services:
   nginx:
-    image: ${IMAGE_TAG_BASE}/${APP_NAME}:nginx-latest
+    image: ${IMAGE_TAG_BASE}${APP_NAME}:nginx-latest
     build:
       context: ./nginx
       args:
         DOCKER_MIRROR_DOMAIN: ${DOCKER_MIRROR_DOMAIN}
         NGINX_VERSION: nginx:${NGINX_VERSION}-alpine
       cache_from:
-        - ${IMAGE_TAG_BASE}/${APP_NAME}:nginx-latest
+        - ${IMAGE_TAG_BASE}${APP_NAME}:nginx-latest
       tags:
-        - ${IMAGE_TAG_BASE}/${APP_NAME}:nginx-latest
+        - ${IMAGE_TAG_BASE}${APP_NAME}:nginx-latest
     container_name: ${APP_NAME}-nginx
     volumes:
       - www:/www:rw
@@ -22,7 +22,7 @@ services:
       - php
 
   php:
-    image: ${IMAGE_TAG_BASE}/${APP_NAME}:php-latest
+    image: ${IMAGE_TAG_BASE}${APP_NAME}:php-latest
     build:
       context: ./php
       args:
@@ -32,9 +32,9 @@ services:
         PHP_EXTENSIONS: ${PHP_EXTENSIONS}
         ENCRYPTED_FILES: ${ENCRYPTED_FILES}
       cache_from:
-        - ${IMAGE_TAG_BASE}/${APP_NAME}:php-latest
+        - ${IMAGE_TAG_BASE}${APP_NAME}:php-latest
       tags:
-        - ${IMAGE_TAG_BASE}/${APP_NAME}:php-latest
+        - ${IMAGE_TAG_BASE}${APP_NAME}:php-latest
     container_name: ${APP_NAME}-php
     volumes:
       - www:/www:rw
@@ -47,7 +47,7 @@ services:
       - default
 
   mysql:
-    image: ${DOCKER_MIRROR_DOMAIN}/mysql:${MYSQL_VERSION}
+    image: ${DOCKER_MIRROR_DOMAIN}mysql:${MYSQL_VERSION}
     container_name: ${APP_NAME}-mysql
     ports:
       - "${MYSQL_HOST_PORT}:3306"
